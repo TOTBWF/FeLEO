@@ -1,0 +1,156 @@
+% THIS IS SIGPROC-SP.TEX - VERSION 3.1
+% WORKS WITH V3.2SP OF ACM_PROC_ARTICLE-SP.CLS
+% APRIL 2009
+%
+% It is an example file showing how to use the 'acm_proc_article-sp.cls' V3.2SP
+% LaTeX2e document class file for Conference Proceedings submissions.
+% ----------------------------------------------------------------------------------------------------------------
+% This .tex file (and associated .cls V3.2SP) *DOES NOT* produce:
+%       1) The Permission Statement
+%       2) The Conference (location) Info information
+%       3) The Copyright Line with ACM data
+%       4) Page numbering
+% ---------------------------------------------------------------------------------------------------------------
+% It is an example which *does* use the .bib file (from which the .bbl file
+% is produced).
+% REMEMBER HOWEVER: After having produced the .bbl file,
+% and prior to final submission,
+% you need to 'insert'  your .bbl file into your source .tex file so as to provide
+% ONE 'self-contained' source file.
+%
+% Questions regarding SIGS should be sent to
+% Adrienne Griscti ---> griscti@acm.org
+%
+% Questions/suggestions regarding the guidelines, .tex and .cls files, etc. to
+% Gerald Murray ---> murray@hq.acm.org
+%
+% For tracking purposes - this is V3.1SP - APRIL 2009
+
+\documentclass{acm_proc_article-sp}
+
+\begin{document}
+
+\title{Background Report: Why to use Rust for a BitTorrent protocol implementation}
+\subtitle{CPSC 311 Final Project }
+%
+% You need the command \numberofauthors to handle the 'placement
+% and alignment' of the authors beneath the title.
+%
+% For aesthetic reasons, we recommend 'three authors at a time'
+% i.e. three 'name/affiliation blocks' be placed beneath the title.
+%
+% NOTE: You are NOT restricted in how many 'rows' of
+% "name/affiliations" may appear. We just ask that you restrict
+% the number of 'columns' to three.
+%
+% Because of the available 'opening page real-estate'
+% we ask you to refrain from putting more than six authors
+% (two rows with three columns) beneath the article title.
+% More than six makes the first-page appear very cluttered indeed.
+%
+% Use the \alignauthor commands to handle the names
+% and affiliations for an 'aesthetic maximum' of six authors.
+% Add names, affiliations, addresses for
+% the seventh etc. author(s) as the argument for the
+% \additionalauthors command.
+% These 'additional authors' will be output/set for you
+% without further effort on your part as the last section in
+% the body of your article BEFORE References or any Appendices.
+
+\numberofauthors{3} %  in this sample file, there are a *total*
+% of EIGHT authors. SIX appear on the 'first-page' (for formatting
+% reasons) and the remaining two appear in the \additionalauthors section.
+%
+\author{
+% You can go ahead and credit any number of authors here,
+% e.g. one 'row of three' or two rows (consisting of one row of three
+% and a second row of one, two or three).
+%
+% The command \alignauthor (no curly braces needed) should
+% precede each author name, affiliation/snail-mail address and
+% e-mail address. Additionally, tag each line of
+% affiliation/address with \affaddr, and tag the
+% e-mail address with \email.
+%
+% 1st. author
+\alignauthor
+James Deng\\
+       \affaddr{13340112}\\
+       \affaddr{w5z7}
+% 2nd. author
+\alignauthor
+Joey Myles\\
+	\affaddr{49961121}\\
+	\affaddr{t8t8}
+% 3rd. author
+% 2nd. author
+\alignauthor
+Joey Myles\\
+	\affaddr{57312134}\\
+	\affaddr{t1d9}
+}
+% There's nothing stopping you putting the seventh, eighth, etc.
+% author on the opening page (as the 'third row') but we ask,
+% for aesthetic reasons that you place these 'additional authors'
+% in the \additional authors block, viz.
+\additionalauthors{Additional authors: John Smith (The Th{\o}rv{\"a}ld Group,
+email: {\texttt{jsmith@affiliation.org}}) and Julius P.~Kumquat
+(The Kumquat Consortium, email: {\texttt{jpkumquat@consortium.net}}).}
+\date{30 July 1999}
+% Just remember to make sure that the TOTAL number of authors
+% is the number that will appear on the first page PLUS the
+% number that will appear in the \additionalauthors section.
+
+\maketitle
+
+\begin{abstract}
+Rust is a relatively new systems programming language that, based on design decisions, is fast, makes threads easy to use, and uses ownership and scope for memory management.  These features of Rust make it ideal for implementing a protocol that requires speed and that is made easier by splitting the required work into multiple threads.  BitTorrent is a protocol that meets this description.  Its peer-to-peer sharing structure means it needs to split work between users and work quickly to satisfy user demands.  It also should work with a well-managed memory system to improve performance and ease of implementation.  For these reasons, Rust is an ideal language in which to implement a BitTorrent protocol.  A BitTorrent protocol also demonstrates particular features of Rust that showcase its usefulness.
+In this paper, we demonstrate the reasons for implementing a BitTorrent protocol in Rust.  We show that the features of Rust, analyzed in detail, match well to the needs of BitTorrent.  We then describe, at a high level, the methods used to implement a BitTorrent protocol in Rust.  This paper goes past the details found in written BitTorrent protocols (1, 2) to determine the order in which one might implement different stages of the BitTorrent protocols and how to apply the features of Rust to them specifically.
+\end{abstract}
+
+
+
+\section{Introduction}
+
+Our project is an implementation of BitTorrent in Rust-lang for a type 3 project.  Starting at the most basic level, none of us knew Rust before we started working on the project.  Once giving the project, we considered Rust based on interest in working with a fast and reasonably new language with plentiful possible future industry applications.  Throughout the planning process, we compared Rust with other similar languages, like Go.  Rust piqued our interest most due to our projection that Rust would be more widely applicable and widely accepted in the future.  We feel that Go, by comparison, does not contain the same possibilities as Rust and that Rust, therefore, will be more widely accepted in industry.  We therefore thought that learning Rust would be more beneficial and insightful for future work.
+
+Once we set our main goal to working in Rust, our next step was to decide upon a program worth implementing.  We considered a few options, including some server-connection protocols.  We ultimately decided upon implementing a BitTorrent protocol based on Rust's speed and ease of thread use.  Again, we considered other language options to see if a BitTorrent protocol would be easier to implement in another language.  For this purpose, we considered both languages' speeds and threading usability.  We also considered Rust's lifetime management that leverages Rust's guaranteed memory safety when comparing it to other options and applying it to a BitTorrent protocol.  We concluded that Rust fitted our needs well, and better than comparable languages, based on the fact that threads are a reasonably easy-to-implement part of Rust and based on Rust's memory safety.  Comparisons of other languages with Rust for our specific implementation and other applications have been a frequent point of discussion with peers since our decision.
+
+Next, we set out to put a cohesive plan together for the implementation of the BitTorrent protocol.  Naturally, we started by reading BitTorrent and Rust docs in order to consider how we would implement the BitTorrent protocol in Rust.  These works gave us insight into the methods for implementing a BitTorrent protocol.  Specifically, the BitTorrent specification discusses the necessary components of implementation and gave us insight into which aspects of the BitTorrent protocol need to be implemented before others.  These works also gave us insight into Rust-lang.  Beyond learning the syntax of Rust, language docs and coding examples taught us about use cases and strengths of Rust.  Details of these and other works will be discussed in greater depth below.
+
+
+\section{Significance}
+
+An implementation of a BitTorrent protocol in Rust is important to the programming community due mostly to the widespread, forthcoming applications of Rust.  Based on its many new and helpful features, Rust, we believe, will soon become a commonly used language for lower-level implementations.  Based on this understanding, we think early applications of Rust will help other programmers with later implementations, and the early applications will help Rust's userbase expand.  Any implementations using a language as young as Rust, we believe, will help users' understanding of the language.  Rust's youth make discovery and application of features some of the most helpful things programmers can do for Rust's advancement.
+
+Additionally, implementing programs in Rust will allow language designers to recognize and deal with problems with the current language design.  In a language as young as Rust, many issues may not be known, and may not be recognizable without programmers testing the language by writing programs.  Similarly, language designers can also respond to user demands that arise from programmers creating new programs.  By others applying Rust, language designers can see what aspects of the language users appreciate and use, as well as which parts may cause problems.  Designers can also examine features that are used in novel and not-previously-considered ways.  This could be very helpful for language upkeep and future designs.
+
+Applying Rust to an implementation of a BitTorrent protocol specifically is also important for the programming community.  This implementation demonstrates many of Rust's most helpful and most applicable features.  Discussed in more detail below, some features of Rust that are especially helpful for implementing a BitTorrent protocol are its speed, ease of use of threading, memory management, cheap templates, passing by reference, and lifetimes.  As mentioned above, the use of these features in an application allows language designers to examine the working elements of the language and expand the language design.  It also allows programmers to get a better sense for the language by offering more example code in the form of a reasonably well-understood application.  A BitTorrent protocol works well for these purposes because it demonstrates so many helpful language features to prospective Rust programmers.  In this way, a BitTorrent protocol allows programmers who are new to Rust to interact with new features and see how they can be applied to real problems.
+
+As something to implement, a BitTorrent protocol is important for a wider group than the programmers who desire to work on Rust.  A BitTorrent protocol appeals to the entire internet community.  Many internet users use BitTorrent protocols -- they are applicable many functions that are important to the internet community.  BitTorrent facilitates the sharing of information and software.  By linking peers, BitTorrent removes the need for a centralized server.  This means peers can upload and download data without keeping the data in one location, limiting risk for the original uploader and removing the threat of having a single point of attack.  It also means that companies without large amounts of resources can deliver content to users without keeping the content on a server.
+
+Our specific implementation of a BitTorrent protocol is unlikely to be picked up and used widely, but it may incentivise others to attempt an implementation of a BitTorrent protocol in Rust, to expand on our implementation, or to apply Rust in a different context.  Any of these possibilities would benefit the internet community by expanding the possibilities for a widely used protocol, BitTorrent, and by increasing the use cases of a language we believe to be widely applicable and powerful, Rust.  We think that a BitTorrent protocol written in Rust would benefit the internet community by being a fast, reliable, and easily maintained BitTorrent protocol.
+
+\section{Resources}
+
+
+
+
+\section{Why Rust}
+Rust is a statically-typed systems programming language that puts memory safety in the forefront, all while avoiding using a garbage collector. It distinguishes itself from other similar languages by having a unique memory management system that makes explicit unsafe memory access and data races\footnote{https://doc.rust-lang.org/complement-project-faq.html}. Rather than explicitly allocating and deallocating heap memory manually, Rust a unique pointer is created whenever heap memory is allocated, and the memory the pointer owns is deallocated whenever the pointer drops out of scope. This analysis is done by the compiler much like variable arrays in C99, so there is little no impact on performance. Complementing the ownership system are the concepts of “Borrowing” and “Lifetimes” which describe when use of refrences are valid.
+In Rust, is it possible to borrow ownership of a resource. There are two types of borrowing, immutable, which is the default, and mutable. You can have multiple references to an immutable reference, because none of them are changing the resource itself. However, you can only have one mutable reference because any more creates the possibility that both references try to write to the resource, causing a data race\footnote{https://doc.rust-lang.org/book/references-and-borrowing.html}. Until there is only one mutable refrence left in scope, all but the most recent refrence is considered frozen and operations on it will result in an error.
+Lifetimes are Rust's way of preventing references to freed, and therefore invalid, resources. Lifetimes are a way of describing the scope of the referenced resource, so that the compiler can determine if a reference will ever access the resource when it is out of scope. \footnote{https://doc.rust-lang.org/book/ownership.html}
+Rust's emphasis on safety is also evident in the way that it handles concurrency. Rust's claim to fame in this domain is that it allows for safe shared mutable state. It manages this in a similar way to the way it enforces memory safety, by enforcing a strong ownership system. A mutable resource can only have one thread take ownership of it, and if the compiler detects that a piece of code would possibly result in a mutable resource with multiple owners, it throws a compilation error. The workaround to this is to use mutexes and atomic references, ensuring that only one thread could ever possibly have ownership of a resource.
+Another interesting feature that Rust provides is let bindings, which are Rust's way of allocating variables. In their most simple form, they don't do too many exciting things. However, Rust allows you to use let bindings to destructure in a pattern matching, which allows us to match the Bittorrent spec very closely, making our code both concise and very legible. Rust's pattern matching and type system as a whole, in fact, is actually very robust, and is sort of a hidden gem of the language. It borrows concepts from higher-level languages like Haskell that are refreshing to see in a self-purported systems language. Guards provide a way to write longs chains of if-then expressions in a legible, concise manner. On the other hand, its pattern matching makes common patterns that would be annoyingly verbose in other systems languages both easy to write and easy to use.
+When looking at our options for other languages, we considered both Go and D. In our research, we found that they both had shortcomings. Go has very nice network libraries but was was simply too similar to Java, C\#. On the other hand, D and Fortress looked promising, but the allure of memory and thread safety trumped out anything that D could offer.
+
+
+\section{Implementation Strategy}
+The first step in implementing a Bittorrent client is being able to parse torrent files. A torrent file is simply a collection of metadata for the torrent, along with a collection of SHA1 hashes for each of the blocks of the torrent. This file is encoded using Bencoding, which is detailed in the BitTorrent specification. To do this, we will use a recursive algorithm that takes advantage of Rust’s string slices, pattern matching, and traits.
+The next major challenge is the establishment of UDP message passing to the tracker to get a list of peers we can download blocks from. Rust provides a set of modules for networking, which provide the functionality we need to perform all the communication we need to do.
+Once we have the list of peers, the next, and least trivial, step is to begin downloading blocks of the file from the peers. To do this we need to open up a TCP connection to one or more of the peers provided by a tracker. We then negotiate to see if the peer has one of the blocks that the downloader is interested in. Once we have found a valid peer, we start with a handshake, which is then followed by a stream of length prefixed messages. Again, Rusts networking modules make most of this communication trivial.
+Now that we understand the basics of the protocol, we can get into the implementation-specific issues that Rust presents, and how we can effectively architect a solution. The first consideration is the lifetime of a block, and how we can transfer ownership in such a way that a block is not freed unintentionally. To do this, we will use Rust’s ownership system to transfer the ownership of the data to an owner that will not go out of scope (until it is deemed necessary). The next consideration is how to manage multiple peer communication within the frameworks that Rust provides. Given the power and safety of Rust’s threading model, we chose to go with a concurrent solution. Because we can guarantee that only one thread will be operating on a shared resource, we can use them without the concerns that mutable shared state would normally entail. Each peer connection will operate on its own distinct thread, but those threads would work together to build the resulting file.
+The final consideration is arguably the most important operation of the program, actually saving the resulting file to disk. Rust provides a set of IO operations that follow its general theme of safety, so we can easily write our file to disk with littl
+% \balancecolumns
+% That's all folks!
+\end{document}
