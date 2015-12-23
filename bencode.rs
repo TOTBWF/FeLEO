@@ -20,12 +20,14 @@ pub fn be_decode(data: &str, data_len: i64) -> &str {
             let mut i = 0;
             let mut decoded_int: str = "";
             while i < data.len() {
-                    let CharRange {ch, next} = data.char_range_at(i);
-                    decoded_int = concat!(decoded_int, ch);
-                    i = next;
+                    //let CharRange {ch, next} = data.char_range_at(i);
+                    let mut ch: str = data.char_range_at(i);
+                    decoded_int = decoded_int + ch;
+                    i += 1;
             }
             //let decoded_int: &str = &data[1..data_len-1];
-            let CharRange {after_int, next} = data.char_range_at(i);
+            //let CharRange {after_int, next} = data.char_range_at(i);
+            let after_int: str = data.char_range_at(i);
             if after_int != "e" {
                 println!("invalid value; rejecting it");
                 return "";
