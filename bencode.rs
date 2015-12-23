@@ -22,7 +22,7 @@ pub fn be_decode(data: &str, data_len: i64) -> &str {
             while i < data.len() {
                     //let CharRange {ch, next} = data.char_range_at(i);
                     let mut ch: str = data.char_range_at(i);
-                    decoded_int = decoded_int + ch;
+                    decoded_int = format!{"{}{}",decoded_int, ch};
                     i += 1;
             }
             //let decoded_int: &str = &data[1..data_len-1];
