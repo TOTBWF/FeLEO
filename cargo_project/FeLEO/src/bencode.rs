@@ -33,20 +33,6 @@ pub fn be_bencode(data: Vec<char>, data_len: i64) -> Vec<char> {
 
         // integers
         'i' => {
-            // indexing string by character doesn't work in rust
-            //let mut i = 0;
-            //let mut decoded_int: str = "";
-            //while i < data.len() {
-            //    let mut ch: str = data.char_range_at(i);
-            //    decoded_int = format!{"{}{}", decoded_int, ch};
-            //    i += 1;
-            //}
-            //let after_int: str = data.char_range_at(i);
-            //if after_int != "e" {
-            //    println!("Invalid value; rejecting it");
-            //    ""
-            //}
-            //decoded_int
             return int_handler(data, data_len);
         }
 
