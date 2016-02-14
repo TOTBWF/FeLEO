@@ -4,32 +4,35 @@
 
 // imports here
 
-fn int_handler(data: &str, data_len: i64) -> &str {
+fn int_handler(data: Vec<char>, data_len: i64) -> Vec<char> {
     // TODO
     // gets "i[int]e" returns int
-    let mut decoded_int: &str;
-    while data != "e" {
-        // move to decoded_int
+    let mut decoded_int: Vec<char>;
+
+    let mut i = 1; // start after i
+    while data[i] != 'e' {
+        decoded_int[i-1] = data[i];
     }
+
     if let decoded_int = decoded_int {
         return decoded_int;
     }
     println!("Error: data NULL");
-    ""
+    vec![]
 }
 
-pub fn be_bencode(data: &str, data_len: i64) -> &str {
-    let mut ret = "";
+pub fn be_bencode(data: Vec<char>, data_len: i64) -> Vec<char> {
+    let mut ret: Vec<char>;
 
     if data_len == 0 {
-        return ret;
+        return vec![];
     }
 
     // match is similar to a switch statement
-    match data {
+    match data[0] {
 
         // integers
-        "i" => {
+        'i' => {
             // indexing string by character doesn't work in rust
             //let mut i = 0;
             //let mut decoded_int: str = "";
@@ -48,13 +51,13 @@ pub fn be_bencode(data: &str, data_len: i64) -> &str {
         }
 
         // strings
-        "0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9" => { ; } // TODO
+        '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' => { ; } // TODO
 
         // lists
-        "l" => { ; } // TODO
+        'l' => { ; } // TODO
 
         // dictionaries
-        "d" => { ; } // TODO
+        'd' => { ; } // TODO
 
         // else: error
         _ => { println!("error: bencoded string not recognized"); }

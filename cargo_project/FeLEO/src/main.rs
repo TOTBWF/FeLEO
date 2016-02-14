@@ -6,6 +6,6 @@
 mod bencode;
 
 fn main() {
-    bencode::be_bencode("", 0);
+    bencode::be_bencode(vec![], 0);
     println!("End of main");
 }
