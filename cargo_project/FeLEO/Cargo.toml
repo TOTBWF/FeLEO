@@ -1,0 +1,6 @@
+[package]
+name = "FeLEO"
+version = "0.1.0"
+authors = ["JMMyles <JosephMMyles@gmail.com>"]
+
+[dependencies]
