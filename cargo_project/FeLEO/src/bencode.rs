@@ -7,6 +7,14 @@
 fn int_handler(data: &str, data_len: i64) -> &str {
     // TODO
     // gets "i[int]e" returns int
+    let mut decoded_int: &str;
+    while data != "e" {
+        // move to decoded_int
+    }
+    if let decoded_int = decoded_int {
+        return decoded_int;
+    }
+    println!("Error: data NULL");
     ""
 }
 
